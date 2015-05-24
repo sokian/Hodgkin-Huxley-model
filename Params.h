@@ -6,6 +6,7 @@
 #include <vector>
 
 namespace Params {
+    extern long double EPS;
     extern long double d;
     extern long double R;
     extern long double Cm;
@@ -15,13 +16,14 @@ namespace Params {
     extern long double ENa;
     extern long double EL;
     extern long double gNa;
-    extern long double GL;
+    extern long double gL;
 
     extern long double dt;
     extern long double dx;
 
     extern size_t Nx;
     extern size_t Nt;
+    extern size_t Times;
     extern long double LEN;
     extern long double T;
 
@@ -31,9 +33,15 @@ namespace Params {
     extern std::vector<std::pair<long double, long double> > H;
 
     inline long double alpN(long double V) {
+        if (std::abs(10 - V) < EPS) {
+            return 0.1;
+        }
         return 0.01 * (10 - V) / (std::exp((10 - V) / 10) - 1);
     }
     inline long double alpM(long double V) {
+        if (std::abs(25 - V) < EPS) {
+            return 1.0;
+        }
         return 0.1 * (25 - V) / (std::exp((25 - V) / 10) - 1);
     }
     inline long double alpH(long double V) {

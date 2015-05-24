@@ -110,5 +110,9 @@ DataLoader::loadConst(std::fstream &stream) {
             Params::dt = Params::T / Params::Nt;
             continue;
         }
+        if (s == "Times") {
+            stream >> Params::Times;
+            continue;
+        }
     }
 }

@@ -12,6 +12,13 @@ int main(int argc, char **argv) {
     } else {
         paramsFileName = argv[1];
     }
+    std::string outputDir;
+    if (argc <= 2) {
+        outputDir = "output/";
+    } else {
+        outputDir = argv[2];
+        outputDir += "/";
+    }
     int res = DataLoader::load(paramsFileName);
     if (res != 0) {
         std::cerr << "Main : Problem with input params file" << std::endl;
@@ -19,13 +26,15 @@ int main(int argc, char **argv) {
     }
 
     Solver solver;
-    solver.init();
-    for (int i = 0; i < Params::Nt; ++i) {
+    if (solver.init(outputDir) != 0) {
+        std::cerr << "Main : error while initing Solver" << std::endl;
+        return 1;
+    }
+    for (int j = 0, i = 0; j < Params::Nt; ++j) {
+        if (j % Params::Times == 0) {
+            solver.printValues();
+        }
         solver.nextStep();
-        solver.printV(std::string("V_") + std::to_string(i) + ".txt");
-        solver.printN(std::string("N_") + std::to_string(i) + ".txt");
-        solver.printM(std::string("M_") + std::to_string(i) + ".txt");
-        solver.printH(std::string("H_") + std::to_string(i) + ".txt");
     }
 
     return 0;
